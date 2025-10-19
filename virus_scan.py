@@ -1,5 +1,6 @@
 import os
 import requests
+from constants import API_KEY
 
 SCAN_URL = 'https://www.virustotal.com/vtapi/v2/file/scan'
 REPORT_URL = 'https://www.virustotal.com/vtapi/v2/file/report'
