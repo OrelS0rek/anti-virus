@@ -1,7 +1,6 @@
 import os
 import requests
 
-API_KEY = "681779a3f3ed79507822523958a88048ca8d9100d4da058a4845ffed50590c18"
 SCAN_URL = 'https://www.virustotal.com/vtapi/v2/file/scan'
 REPORT_URL = 'https://www.virustotal.com/vtapi/v2/file/report'
 
@@ -21,8 +20,16 @@ def scan_file(file_path):
     response = requests.get(REPORT_URL, params=params)
     if not response:
         raise Exception("Unexpected error in response")
-    if response.status_code
-    return response.json()['positives'] > 0
+    if response.status_code == 200:
+        result = response.json()
+        if result['positives']>0:
+            print("virus detected")
+        else:
+            print("virus has not been detected, file safe")
+        return result['positives']>0
+    else:
+        raise Exception("unexpected status code:", response.status_code)
+
 
 def scan_folder_files(folder_path):
     for item in os.listdir(folder_path):
@@ -30,4 +37,5 @@ def scan_folder_files(folder_path):
         if os.path.isdir(full_path):
             scan_folder_files(full_path)
         else:
+            print(f"scanning {item}")
             scan_file(full_path)
